@@ -4,12 +4,8 @@
 
 set -e
 
-if [ -z "$IVY_HOME" ]; then
-    IVY_HOME="$HOME/.ivy2"
-fi
-
 if [ $# -lt 3 ]; then
     exec ivy help install
 fi
 
-java -jar `ls $IVY_HOME/bin/ivy*.jar` -dependency $@
+exec ivy exec -dependency $@
