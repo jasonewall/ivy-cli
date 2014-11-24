@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # Usage: ivy exec <ivy-options>
 # Summary: Make a call directly to the ivy.jar
-# Help: ivy exec -? to get a list of options you can pass in
+# Help: Call "ivy exec -?" to get a list of options you can pass in
+# This is the same as the list found on the Apachy Ivy page covering
+# stand alone execution http://ant.apache.org/ivy/history/latest-milestone/standalone.html
 
 if [ -z "$IVY_HOME" ]; then
     IVY_HOME="$HOME/.ivy2"
