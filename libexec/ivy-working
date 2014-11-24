@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Usage: ivy working <artifact path> [<ivy-options]
+# Summary: Publish working copies of an artifact to your local repo
+# Help:
+# <artifact path>: The file system path to the physical artifact you want to publish
+#     (NOT including the actual file name, JUST the containing directory)
+# <ivy-options>: Options you would pass into ivy exec (See ivy exec -?)
+#     (EXCEPT: The publishing options)
+
+set -e
+
+# Provide ivy completions
+if [ "$1" = "--complete" ]; then
+    echo "<artifact path>"
+    echo -confs
+    echo -debug
+    echo -warn
+    echo -error
+    echo -verbose
+    exit
+fi
+
+if [ $# -lt 1 ]; then
+    exec ivy help working
+fi
+
+ARTIFACT_PATH=$1; shift
+
+ivy exec -publish local -publishpattern $ARTIFACT_PATH/[artifact].[ext] -revision working -overwrite $@
+
+rm ivy-working.xml
