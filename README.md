@@ -3,6 +3,10 @@ ivy-cli
 
 Command line wrapper for the [Apache Ivy](http://ant.apache.org/ivy/index.html) project.
 
+## Why?!
+
+See [here](https://github.com/thejayvm/hex/wiki/The-ivy-cli-is-born). ([The ivy cli is born](https://github.com/thejayvm/hex/wiki/The-ivy-cli-is-born))
+
 ## Installing
 
 1. Checkout the Ivy CLI into your homedirectory `~/.ivy-cli`
