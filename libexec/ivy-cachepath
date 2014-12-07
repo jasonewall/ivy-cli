@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Usage: ivy cachepath <confs> [<ivy-options>]
+# Summary: Output the cachepath for all artifacts included in the given configurations
+# Help:
+# <confs>: Comma-separated list of configurations to include as part of this resolution
+#       (No spaces plz)
+# <ivy-options>: Options you would pass into ivy exec (See ivy exec -?)
+#       (EXCEPT: -cachepath, -confs, -[level], and -verbose)
+
+set -e
+
+# Provide ivy completions
+if [ "$1" = "--completions" ]; then
+    echo "<confs>"
+    echo "-debug"
+    echo "-warn"
+    echo "-error"
+    echo "-verbose"
+    exit
+fi
+
+if [ $# -gt 0 ]; then
+    CONFS="-confs $1"
+    shift
+fi
+
+ivy exec -error -cachepath .ivy_classpath $CONFS $@
+
+cat .ivy_classpath | tr \: \\n

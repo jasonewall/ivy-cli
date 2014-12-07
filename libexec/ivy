@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
+IVY_CLASSPATH=.ivy_classpath
+
 resolve_link() {
   $(type -p greadlink readlink | head -1) "$1"
 }
@@ -26,7 +28,7 @@ export PATH="${libexec_path}:$PATH"
 command="$1"
 case "$command" in
 "" )
-  exec ivy-exec -cachepath .ivy_classpath
+  exec ivy-exec -cachepath $IVY_CLASSPATH
   ;;
 "-h" | "--help" )
   exec ivy-help
