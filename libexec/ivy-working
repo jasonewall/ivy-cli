@@ -26,6 +26,6 @@ fi
 
 ARTIFACT_PATH=$1; shift
 
-ivy exec -publish local -publishpattern $ARTIFACT_PATH/[artifact].[ext] -revision working -overwrite $@
+ivy exec -publish local -publishpattern $ARTIFACT_PATH/[artifact].[ext] -revision working -status integration -overwrite $@
 
 rm ivy-working.xml
