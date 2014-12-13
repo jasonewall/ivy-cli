@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Usage: ivy build
+# Summary: Compiles your src directory using ivy's resolved classpath
+
+set -e
+
+ivy exec -cachepath .ivy_classpath -error
+
+CLASSPATH=`cat .ivy_classpath`
+
+if [ -n "$CLASSPATH" ]; then
+  COMPILE_CLASSPATH="-cp $CLASSPATH"
+fi
+
+find ./src/ -type f -name "*.java" -print0 | xargs -n 1 -0 javac -d ./.classes -sourcepath ./src $COMPILE_CLASSPATH
