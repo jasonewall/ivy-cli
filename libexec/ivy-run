@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Usage: ivy run main.Class [<arguments>,...]
+# Summary: Run the current project using the ivy generated classpath to compile and execute the current project
+
+ivy exec -cachepath .ivy_classpath -error
+
+CLASSPATH=`cat .ivy_classpath`
+
+if [ -n "$CLASSPATH" ]; then
+    COMPILE_CLASSPATH="-cp $CLASSPATH"
+fi
+
+find ./src/ -type f -name "*.java" -exec javac -d ./.classes -sourcepath ./src $COMPILE_CLASSPATH {} \;
+
+if [ -n "$CLASSPATH" ]; then
+    CLASSPATH="$CLASSPATH:"
+fi
+
+java -cp "$CLASSPATH./.classes" "$@"
