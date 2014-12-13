@@ -9,4 +9,16 @@ if [ -z "$IVY_HOME" ]; then
     IVY_HOME="$HOME/.ivy2"
 fi
 
-java -jar `ls $IVY_HOME/bin/ivy*.jar` $@
+IVY_JAR=`ls $IVY_HOME/bin/ivy*.jar 2> /dev/null`
+
+if [ -z "$IVY_JAR" ]; then
+    #/bin didn't work, try /lib (Ant based $IVY_HOMEs)
+    IVY_JAR=`ls $IVY_HOME/lib/ivy*.jar 2> /dev/null`
+fi
+
+if [ -z "$IVY_JAR" ]; then
+    echo "Unable to find ivy.jar. Are you sure IVY_HOME is set correctly?"
+    exit 1
+fi
+
+java -jar $IVY_JAR "$@"
