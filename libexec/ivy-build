@@ -12,6 +12,8 @@ if [ -n "$CLASSPATH" ]; then
   COMPILE_CLASSPATH="-cp $CLASSPATH"
 fi
 
+mkdir -pv ./.classes
+
 if [ -z "$1" ]; then
   find ./src/ -type f -name "*.java" -print0 | xargs -n 1 -0 javac -d ./.classes -sourcepath ./src $COMPILE_CLASSPATH
 else
