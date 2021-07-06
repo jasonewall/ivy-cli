@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Usage: ivy rehash
+# Summary: Create any missing bin commands from downloaded jars with executables (bin)
+
+set -e
+
+if [ "$1" = "--completions" ]; then
+    exit
+fi
+
+export IVY_PACKAGES_ROOT=$_IVY_ROOT/packages
+
+[ -d $IVY_PACKAGES_ROOT ] || mkdir $IVY_PACKAGES_ROOT
+
+function generate_hashes () {
+    libdir=$1
+    binname=$2
+
+    binname=${binname##*/} # just the file and extension
+    libname=${libdir##*/} # just the name of the lib (implicitly includes versioning info)
+    [ ! -z "$_IVY_CLI_TEST" ] && echo $binname, $libname
+}
+
+for lib in $IVY_PACKAGES_ROOT/*/; do
+    lib=${lib%*/} # remove trailing slash so the line below looks a bit cleaner
+    for bin in $lib/bin/*; do
+        generate_hashes $lib $bin
+    done
+done

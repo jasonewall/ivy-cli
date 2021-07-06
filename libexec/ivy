@@ -2,6 +2,7 @@
 set -e
 
 IVY_CLASSPATH=.ivy_classpath
+IVY_SELF="ivy"
 
 resolve_link() {
   $(type -p greadlink readlink | head -1) "$1"
@@ -20,6 +21,31 @@ abs_dirname() {
   pwd
   cd "$cwd"
 }
+
+check_global_switch() {
+  if [ "$1" != "$2" ]; then
+    argname=$1
+    shift 2
+    remaining_command=${@#"$argname"}
+    echo "Global switch ($argname) passed to sub-command. Perhaps you meant: $IVY_SELF $argname $remaining_command"
+    exit 1
+  fi
+}
+
+for a in "$@"; do
+  case "$a" in
+    --test)
+      check_global_switch $a $1 $@
+      export _IVY_CLI_TEST=yes
+      shift
+      ;;
+    *)
+      # let sub do the rest
+      ;;
+  esac
+done
+
+[ ! -z "$_IVY_CLI_TEST" ] && echo $@
 
 libexec_path="$(abs_dirname "$0")"
 export _IVY_ROOT="$(abs_dirname "$libexec_path")"
