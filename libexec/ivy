@@ -24,9 +24,9 @@ abs_dirname() {
 
 check_global_switch() {
   if [ "$1" != "$2" ]; then
-    argname=$1
+    local argname=$1
     shift 2
-    remaining_command=${@#"$argname"}
+    local remaining_command=${@#"$argname"}
     echo "Global switch ($argname) passed to sub-command. Perhaps you meant: $IVY_SELF $argname $remaining_command"
     exit 1
   fi
