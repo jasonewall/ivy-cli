@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+# Usage: ivy test
+# Summary: Run all the commands with tests available in test mode
+
+TEST_FAILURE_EXIT_CODE=2
+
+if [ "$1" = "--completions" ]; then
+    echo " "
+    exit
+fi
+
+report() {
+    local message=$1
+    echo $message
+}
+
+expect_contents() {
+    local result=$1
+    local expected=$2
+    local message=$3
+
+    if [[ "$result" != *"$expected"* ]]; then
+        report "'$result' should contain '$expected' and does not.
+        $message"
+        exit $TEST_FAILURE_EXIT_CODE
+    fi
+}
+
+expect_equal() {
+    local result=$1
+    local expected=$2
+    local message=$3
+
+    if [ "$result" != "$expected" ]; then
+        report "Expected \"$result\" to equal \"$expected\".
+        $message"
+        exit $TEST_FAILURE_EXIT_CODE
+    fi
+}
+
+expect_not_equal() {
+    local result=$1
+    local expected=$2
+    local message=$3
+
+    if [ "$result" == "$expected" ]; then
+        report "Expected \"$result\" to not equal \"$expected.\"
+        $message"
+        exit $TEST_FAILURE_EXIT_CODE
+    fi
+}
+
+function test_that_passing_global_flags_into_sub_commands_raises_error() {
+    output=$(ivy -h --test)
+    local exitcode=$?
+    expect_not_equal "$exitcode" 0 "Passing --test to the sub-command should not result in success."
+    expect_contents "$output" "ivy --test -h"
+}
+
+function test_that_passing_global_flags_before_the_command_still_functions() {
+    output=$(ivy --test -h)
+    local exitcode=$?
+    expect_equal "$exitcode" 0 "Passing --test to the global ivy command is ok."
+}
+
+
+run_tests() {
+    grep "^function test_" $0 | while read -r test; do
+        local testname=${test%"() {"}
+        testname=${testname#"function "}
+        # echo $testname
+        $testname
+    done
+}
+
+run_tests
