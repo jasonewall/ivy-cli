@@ -14,7 +14,7 @@ IVY_SHIMS=$_IVY_ROOT/shims
 
 [ -d $IVY_PACKAGES_ROOT ] || mkdir $IVY_PACKAGES_ROOT
 
-function generate_hashes () {
+function generate_shim() {
     local libdir=$1
     local binname=$2
 
@@ -32,6 +32,6 @@ function generate_hashes () {
 for lib in $IVY_PACKAGES_ROOT/*/; do
     lib=${lib%*/} # remove trailing slash so the line below looks a bit cleaner
     for bin in $lib/bin/*; do
-        generate_hashes $lib $bin
+        generate_shim $lib $bin
     done
 done
