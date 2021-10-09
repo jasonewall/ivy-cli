@@ -8,17 +8,25 @@ if [ "$1" = "--completions" ]; then
     exit
 fi
 
-export IVY_PACKAGES_ROOT=$_IVY_ROOT/packages
+IVY_PACKAGES_ROOT=$_IVY_ROOT/packages
+
+IVY_SHIMS=$_IVY_ROOT/shims
 
 [ -d $IVY_PACKAGES_ROOT ] || mkdir $IVY_PACKAGES_ROOT
 
 function generate_hashes () {
-    libdir=$1
-    binname=$2
+    local libdir=$1
+    local binname=$2
 
-    binname=${binname##*/} # just the file and extension
-    libname=${libdir##*/} # just the name of the lib (implicitly includes versioning info)
-    [ ! -z "$_IVY_CLI_TEST" ] && echo $binname, $libname
+    binname=$(basename $binname)
+    local libname=$(basename $libdir) # just the name of the lib (implicitly includes versioning info)
+    [ -n "$_IVY_CLI_TEST" ] && echo $binname, $libname && return 0
+
+    if [ ! -f $IVY_SHIMS/$binname ]; then
+        ln -s $_IVY_ROOT/libexec/shim $IVY_SHIMS/$binname
+        mkdir -p $IVY_SHIMS/.index/$binname
+    fi
+    touch $IVY_SHIMS/.index/$binname/$libname
 }
 
 for lib in $IVY_PACKAGES_ROOT/*/; do

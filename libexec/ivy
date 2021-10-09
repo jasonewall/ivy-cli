@@ -45,7 +45,7 @@ for a in "$@"; do
   esac
 done
 
-[ ! -z "$_IVY_CLI_TEST" ] && echo $@
+[ -n "$_IVY_CLI_TEST" ] && echo $@
 
 libexec_path="$(abs_dirname "$0")"
 export _IVY_ROOT="$(abs_dirname "$libexec_path")"
@@ -55,6 +55,9 @@ command="$1"
 case "$command" in
 "" )
   exec ivy-exec -cachepath $IVY_CLASSPATH
+  ;;
+"root" )
+  echo $_IVY_ROOT
   ;;
 "-h" | "--help" )
   exec ivy-help
