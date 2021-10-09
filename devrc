@@ -1,0 +1,2 @@
+
+export PATH=$(bin/ivy root)/bin:$(bin/ivy root)/shims:$PATH
