@@ -24,11 +24,13 @@ function _remove_package() {
 
     for bin in $IVY_PACKAGES_ROOT/$package/bin/*; do
         binname=$(basename $bin)
-        rm $IVY_SHIMS/.index/$binname/$package
-        versions=( $(ls $IVY_SHIMS/.index/$binname) )
+        rm -f $IVY_SHIMS/.index/$binname/$package
+        set +e
+        versions=( $(ls $IVY_SHIMS/.index/$binname 2> /dev/null) )
+        set -e
         if [ ${#versions[@]} -eq 0 ]; then
-            rmdir $IVY_SHIMS/.index/$binname
-            rm $IVY_SHIMS/$binname
+            rm -rf $IVY_SHIMS/.index/$binname
+            rm -f $IVY_SHIMS/$binname
         fi
     done
 
