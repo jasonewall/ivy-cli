@@ -6,7 +6,7 @@ _ivy() {
     COMPREPLY=( $(compgen -W "$(ivy commands)" -- "$word") )
   else
     local command="${COMP_WORDS[1]}"
-    local completions="$(ivy completions "$command")"
+    local completions="$(ivy completions "$command" ${COMP_WORDS[@]:2})"
     COMPREPLY=( $(compgen -W "$completions" -- "$word") )
   fi
 }
